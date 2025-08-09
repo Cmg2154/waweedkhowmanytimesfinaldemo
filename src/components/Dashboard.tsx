@@ -11,7 +11,27 @@ interface DashboardProps {
   formatAddress?: (address: string) => string
   getChainName?: (chainId: string) => string
 }
+const connectWallet = async () => {
+  if (typeof window.ethereum === 'undefined') {
+    alert('MetaMask is not installed. Please install it to continue.');
+    return;
+  }
 
+  try {
+    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const selectedAccount = accounts[0];
+
+    // Optionally log or set state
+    console.log('Connected MetaMask account:', selectedAccount);
+
+    // If you have a way to update user state, do it here
+    // Example: setUser({ ...user, address: selectedAccount })
+
+  } catch (error) {
+    console.error('MetaMask connection failed:', error);
+    alert('Failed to connect to MetaMask.');
+  }
+};
 const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, formatAddress, getChainName }) => {
   const [activeView, setActiveView] = useState<'dashboard' | 'wallet'>('dashboard')
   const isWeb3User = Boolean(user.address)
@@ -231,11 +251,13 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, formatAddress, ge
               <p className="text-sm font-medium text-gray-800">Analytics</p>
               <p className="text-xs text-gray-600">View detailed reports</p>
             </button>
-            <button className="p-4 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200 text-left"
-              onClick={() => useNavigate('/wallet-dashboard')}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet w-6 h-6 text-purple-600 mb-2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+            <button
+              onClick={connectWallet}
+              className="p-4 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200 text-left"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-wallet w-6 h-6 text-purple-600 mb-2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
               <p className="text-sm font-medium text-gray-800">Web3 Wallet</p>
-              <p className="text-xs text-gray-600">Send transaction & view history</p>
+              <p className="text-xs text-gray-600">Connect MetaMask & authenticate</p>
             </button>
           </div>
         </GlassCard>
