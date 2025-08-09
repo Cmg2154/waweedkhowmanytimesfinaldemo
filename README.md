@@ -13,3 +13,4 @@ This is a frontend demo project showcasing blockchain wallet login and payment s
 ```bash
 npm install
 npm run dev
+ctrl+click http://localhost:5173/ 
