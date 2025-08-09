@@ -3,6 +3,7 @@ import { LogOut, User, Settings, Bell, Activity, TrendingUp, Users, Calendar, Wa
 import GlassCard from './GlassCard'
 import Button from './Button'
 import WalletDashboard from './WalletDashboard'
+import { useNavigate } from 'react-router-dom';
 
 interface DashboardProps {
   user: { email?: string; name: string; address?: string; balance?: string; chainId?: string }
@@ -14,7 +15,7 @@ interface DashboardProps {
 const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, formatAddress, getChainName }) => {
   const [activeView, setActiveView] = useState<'dashboard' | 'wallet'>('dashboard')
   const isWeb3User = Boolean(user.address)
-  
+
   const stats = [
     { label: 'Total Users', value: '12,345', icon: Users, color: 'from-blue-500/20 to-purple-500/20', iconColor: 'text-blue-600' },
     { label: 'Active Sessions', value: '1,234', icon: Activity, color: 'from-green-500/20 to-blue-500/20', iconColor: 'text-green-600' },
@@ -230,21 +231,11 @@ const Dashboard: React.FC<DashboardProps> = ({ user, onLogout, formatAddress, ge
               <p className="text-sm font-medium text-gray-800">Analytics</p>
               <p className="text-xs text-gray-600">View detailed reports</p>
             </button>
-            <button 
-              onClick={() => isWeb3User && setActiveView('wallet')}
-              className="p-4 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200 text-left"
-            >
-              {isWeb3User ? (
-                <Wallet className="w-6 h-6 text-purple-600 mb-2" />
-              ) : (
-                <Bell className="w-6 h-6 text-purple-600 mb-2" />
-              )}
-              <p className="text-sm font-medium text-gray-800">
-                {isWeb3User ? 'Web3 Wallet' : 'Notifications'}
-              </p>
-              <p className="text-xs text-gray-600">
-                {isWeb3User ? 'Send transactions & view history' : 'Manage alerts and messages'}
-              </p>
+            <button className="p-4 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-200 text-left"
+              onClick={() => useNavigate('/wallet-dashboard')}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wallet w-6 h-6 text-purple-600 mb-2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"></path><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"></path><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"></path></svg>
+              <p className="text-sm font-medium text-gray-800">Web3 Wallet</p>
+              <p className="text-xs text-gray-600">Send transaction & view history</p>
             </button>
           </div>
         </GlassCard>
